@@ -14,7 +14,7 @@ struct AddAssignmentView: View {
     @State private var description = ""
     @State private var dueDate = Date()
     @Environment(\.presentationMode) var presentationMode
-    static let course = ["High", "Medium", "Low"]
+    static let course = ["First Period", "Second Period", "Thrid Period"]
     
     var body: some View {
         NavigationView {
@@ -29,20 +29,18 @@ struct AddAssignmentView: View {
  
             }
             .sheet(isPresented: $showingAddAssignmentView, content: {
-
                 AddAssignmentView(assignmentList: assignmentList)
-
                        })
             .navigationBarTitle("Add New course", displayMode: .inline)
-            .navigationBarItems(leading: EditButton(),
-                                
-                                trailing: Button(action: {
-
-                                    showingAddAssignmentView = true}) {
-
-                                    Image(systemName: "plus")
-
-            })
+            .navigationBarItems(trailing: Button("Save") {
+                            if course.count > 0 && description.count > 0 {
+                                let item = AssignmentItem(id: UUID(), course: course,
+                                                    description: description, dueDate: dueDate)
+                                assignmentList.items.append(item)
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        })
+            
         }
         
     }
@@ -53,4 +51,3 @@ struct AddAssignmentView_Previews: PreviewProvider {
         AddAssignmentView(assignmentList: AssignmentList())
     }
 }
-
